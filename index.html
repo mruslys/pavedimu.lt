@@ -1,95 +1,109 @@
 <!DOCTYPE html>
-<!--
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pavedimu.lt – Greitas ir paprasta dalintis pavedimo duomenimis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>pavedimu.lt – Greitas ir paprastas dalinimasis pavedimo duomenimis</title>
     
     <meta property="og:title" content="pavedimu.lt – Mokėjimo informacija" />
-    <meta property="og:description" content="Patogus rekvizitų nukopijavimas ir QR kodas greitam pavedimui." />
+    <meta property="og:description" content="Patogus rekvizitų nukopijavimas greitam pavedimui." />
     <meta property="og:type" content="website" />
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            height: 100dvh;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-[100dvh] flex flex-col justify-between p-4 antialiased">
+<body class="bg-slate-50 text-slate-800 flex flex-col justify-between p-4 md:p-6 antialiased overflow-hidden">
 
-    <main class="flex-1 flex flex-col items-center justify-center py-8">
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
+    <main class="flex-1 flex items-center justify-center w-full my-auto">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col max-h-[85dvh]">
             
-            <div class="p-6 text-center bg-linear-to-b from-slate-50 to-white border-b border-slate-100">
-                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 text-blue-600 mb-3">
-                    <i class="fa-solid fa-user text-xl"></i>
-                </div>
-                <h1 id="recipient-name" class="text-xl font-bold text-slate-900 tracking-tight">Kraunama...</h1>
-                
-                <div id="amount-container" class="hidden mt-3">
-                    <span id="amount-value" class="text-3xl font-extrabold text-slate-900">0.00</span>
-                    <span class="text-xl font-bold text-slate-900"> €</span>
+            <div class="p-4 text-center bg-linear-to-b from-slate-50 to-white border-b border-slate-100 shrink-0">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 text-emerald-600">
+                    <i class="fa-solid fa-wallet text-lg"></i>
                 </div>
             </div>
 
-            <div class="p-6 space-y-4">
+            <div class="p-4 sm:p-6 space-y-3.5 overflow-y-auto">
                 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sąskaitos numeris (IBAN)</label>
-                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-3 hover:border-slate-300 transition-colors">
-                        <span id="iban-text" class="font-mono text-sm font-medium text-slate-700 break-all pr-12 select-all">LT000000000000000000</span>
-                        <button onclick="copySingleField('iban-text', this)" class="absolute right-2 text-slate-400 hover:text-blue-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
-                            <i class="fa-regular fa-copy text-lg"></i>
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo gavėjas</label>
+                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
+                        <span id="recipient-name" class="text-sm font-bold text-slate-800 truncate pr-12 select-all">Kraunama...</span>
+                        <button onclick="copySingleField('recipient-name', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-regular fa-copy text-base"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Sąskaitos numeris (IBAN)</label>
+                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
+                        <span id="iban-text" class="font-mono text-xs sm:text-sm font-medium text-slate-700 break-all pr-12 select-all">LT000000000000000000</span>
+                        <button onclick="copySingleField('iban-text', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-regular fa-copy text-base"></i>
                         </button>
                     </div>
                 </div>
 
                 <div id="purpose-container" class="hidden">
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Mokėjimo paskirtis</label>
-                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-3 hover:border-slate-300 transition-colors">
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo paskirtis</label>
+                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
                         <span id="purpose-text" class="text-sm font-medium text-slate-700 truncate pr-12 select-all">-</span>
-                        <button onclick="copySingleField('purpose-text', this)" class="absolute right-2 text-slate-400 hover:text-blue-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
-                            <i class="fa-regular fa-copy text-lg"></i>
+                        <button onclick="copySingleField('purpose-text', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-regular fa-copy text-base"></i>
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-3 pt-2">
-                    <a href="./sukurti.html"
-                       class="flex flex-col items-center justify-center text-center p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/60 text-slate-600 transition-all active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-plus text-lg mb-1"></i>
-                        <span class="text-[11px] font-medium">Sukurti</span>
-                    </a>
-                    
-                    <button onclick="copyAllData(this)" class="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-100 transition-all active:scale-95 cursor-pointer">
-                        <i id="copy-all-icon" class="fa-regular fa-copy text-lg mb-1"></i>
-                        <span id="copy-all-text" class="text-[11px] font-medium">Kopijuoti viską</span>
-                    </button>
-                    
-                    <button onclick="toggleQR()" class="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/60 text-slate-600 transition-all active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-qrcode text-lg mb-1"></i>
-                        <span class="text-[11px] font-medium">QR kodas</span>
-                    </button>
+                <div id="amount-container" class="hidden">
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo suma</label>
+                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
+                        <span class="text-sm font-bold text-slate-800 select-all"><span id="amount-value">0.00</span> €</span>
+                        <button onclick="copySingleField('amount-wrapper', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
+                            <span id="amount-wrapper" class="hidden"></span>
+                            <i class="fa-regular fa-copy text-base"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div id="qr-wrapper" class="hidden pt-4 flex flex-col items-center justify-center border-t border-slate-100 transition-all">
-                    <div id="qrcode" class="p-3 bg-white rounded-2xl border border-slate-200/60 shadow-xs"></div>
-                    <p class="text-[11px] text-slate-400 mt-2 font-medium">Nuskenuokite kodą nuorodos atidarymui</p>
+                <div class="grid grid-cols-2 gap-3 pt-2 shrink-0">
+                    
+                    <button onclick="copyAllData(this)" class="flex items-center justify-center gap-2 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200/60 font-medium text-xs sm:text-sm transition-all active:scale-95 cursor-pointer">
+                        <i id="copy-all-icon" class="fa-regular fa-copy text-base"></i>
+                        <span id="copy-all-text">Kopijuoti viską</span>
+                    </button>
+                    
+                    <a href="./sukurti.html" class="flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md shadow-emerald-100 font-bold text-xs sm:text-sm transition-all active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-plus text-base"></i>
+                        <span>Sukurti nuorodą</span>
+                    </a>
                 </div>
 
             </div>
         </div>
     </main>
 
-    <footer class="text-center pb-4 text-xs text-slate-400 font-medium">
+    <footer class="text-center pt-2 pb-1 text-xs text-slate-400 font-medium shrink-0">
         Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
     </footer>
+
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300 max-w-[90vw]">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base shrink-0"></i>
+        <span id="toast-message" class="truncate">Nukopijuota!</span>
+    </div>
+
+    <style>
+        .toast-show { opacity: 1 !important; transform: translate(-50%, 0) !important; }
+    </style>
 
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
@@ -104,291 +118,62 @@
         if (!iban && !name) {
             document.getElementById('recipient-name').innerText = "Jūratė (Arbatpinigiai)";
             document.getElementById('iban-text').innerText = "LT001234567890123456";
+            
             document.getElementById('purpose-container').classList.remove('hidden');
             document.getElementById('purpose-text').innerText = "Arbatpinigiai";
+            
             document.getElementById('amount-container').classList.remove('hidden');
             document.getElementById('amount-value').innerText = "5.00";
+            document.getElementById('amount-wrapper').innerText = "5.00 €";
         } else {
-            if (name) document.getElementById('recipient-name').innerText = decodeURIComponent(name);
-            if (iban) document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
-            
+            if (name) {
+                document.getElementById('recipient-name').innerText = decodeURIComponent(name);
+            }
+            if (iban) {
+                document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
+            }
             if (purpose) {
                 document.getElementById('purpose-container').classList.remove('hidden');
                 document.getElementById('purpose-text').innerText = decodeURIComponent(purpose);
             }
-            
             if (amount) {
+                const formattedAmount = parseFloat(amount).toFixed(2);
                 document.getElementById('amount-container').classList.remove('hidden');
-                document.getElementById('amount-value').innerText = parseFloat(amount).toFixed(2);
+                document.getElementById('amount-value').innerText = formattedAmount;
+                document.getElementById('amount-wrapper').innerText = formattedAmount + " €";
             }
         }
 
-        // Sugeneruojame QR kodą fone (bet jis paslėptas)
-        new QRCode(document.getElementById("qrcode"), {
-            text: window.location.href,
-            width: 140,
-            height: 140,
-            colorDark : "#0f172a",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
+        // Funkcija pranešimo rodymui
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            // Jei žinutė per ilga (pvz ilgas vardas), sutrumpiname ją pranešime su „...“
+            toastMsg.innerText = message;
+            
+            toast.classList.add('toast-show');
+            setTimeout(() => { toast.classList.remove('toast-show'); }, 2200);
+        }
 
         // Vieno lauko kopijavimas
         function copySingleField(elementId, button) {
             const text = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(text).then(() => {
-                const oldIcon = button.innerHTML;
-                button.innerHTML = `<i class="fa-solid fa-check text-emerald-600 text-lg"></i>`;
-                setTimeout(() => { button.innerHTML = oldIcon; }, 1500);
-            });
-        }
-
-        // „KOPIJUOTI VISKĄ“ FUNKCIJA (jūsų sugalvotas formatas)
-        function copyAllData(button) {
-            const currentName = document.getElementById('recipient-name').innerText;
-            const currentIban = document.getElementById('iban-text').innerText;
-            const hasPurpose = !document.getElementById('purpose-container').classList.contains('hidden');
-            const hasAmount = !document.getElementById('amount-container').classList.contains('hidden');
-
-            let textToCopy = `${currentName}\n${currentIban}`;
-            
-            if (hasPurpose) {
-                const currentPurpose = document.getElementById('purpose-text').innerText;
-                textToCopy += `\n${currentPurpose}`;
-            }
-            if (hasAmount) {
-                const currentAmount = document.getElementById('amount-value').innerText;
-                textToCopy += `\n${currentAmount} €`;
-            }
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const icon = document.getElementById('copy-all-icon');
-                const text = document.getElementById('copy-all-text');
-                
-                // Animacija
-                icon.className = "fa-solid fa-check text-lg mb-1 text-emerald-600";
-                //text.innerText = "Nukopijuota!";
-                
-                setTimeout(() => {
-                    icon.className = "fa-regular fa-copy text-lg mb-1";
-                    text.innerText = "Kopijuoti viską";
-                }, 1500);
-            });
-        }
-
-        // QR kodo rodymas / slėpimas
-        function toggleQR() {
-            const qrWrapper = document.getElementById('qr-wrapper');
-            qrWrapper.classList.toggle('hidden');
-            if (!qrWrapper.classList.contains('hidden')) {
-                qrWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
-    </script>
-</body>
-</html>-->
-<!DOCTYPE html>
-<html lang="lt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>pavedimu.lt – Greitas ir paprasta dalintis pavedimo duomenimis</title>
-    
-    <meta property="og:title" content="pavedimu.lt – Mokėjimo informacija" />
-    <meta property="og:description" content="Patogus rekvizitų nukopijavimas ir QR kodas greitam pavedimui." />
-    <meta property="og:type" content="website" />
-
-    <!-- Tailwind CSS v4 -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    
-    <!-- FontAwesome Ikonoms -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- QR kodų generavimo biblioteka -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
-        body { 
-            font-family: 'Inter', sans-serif; 
-            height: 100dvh;
-        }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 flex flex-col justify-between p-4 md:p-6 antialiased overflow-hidden">
-
-    <!-- Pagrindinis turinys -->
-    <main class="flex-1 flex items-center justify-center w-full my-auto">
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col max-h-[85dvh]">
-            
-            <!-- Viršutinė dalis (Gavėjas ir Suma) -->
-            <div class="p-4 sm:p-6 text-center bg-linear-to-b from-slate-50 to-white border-b border-slate-100 shrink-0">
-                <div class="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-50 text-emerald-600 mb-2 sm:mb-3">
-                    <i class="fa-solid fa-user text-lg"></i>
-                </div>
-                
-                <!-- Gavėjo blokas su kopijavimo mygtuku -->
-                <div class="flex items-center justify-center gap-2 group max-w-full px-4">
-                    <h1 id="recipient-name" class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight truncate select-all">Kraunama...</h1>
-                    <button onclick="copySingleField('recipient-name', this, 'Gavėjo vardas')" class="text-slate-400 hover:text-emerald-600 p-1 rounded-md hover:bg-slate-100/80 transition-all active:scale-95 cursor-pointer shrink-0">
-                        <i class="fa-regular fa-copy text-sm sm:text-base"></i>
-                    </button>
-                </div>
-                
-                <div id="amount-container" class="hidden mt-1.5 sm:mt-3">
-                    <span id="amount-value" class="text-2.5xl sm:text-3xl font-extrabold text-slate-900">0.00</span>
-                    <span class="text-lg sm:text-xl font-bold text-slate-900"> €</span>
-                </div>
-            </div>
-
-            <!-- Rekvizitų laukai -->
-            <div class="p-4 sm:p-6 space-y-3 sm:space-y-4 overflow-y-auto">
-                
-                <!-- IBAN sąskaita -->
-                <div>
-                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Sąskaitos numeris (IBAN)</label>
-                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
-                        <span id="iban-text" class="font-mono text-xs sm:text-sm font-medium text-slate-700 break-all pr-12 select-all">LT000000000000000000</span>
-                        <button onclick="copySingleField('iban-text', this, 'Sąskaitos numeris')" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
-                            <i class="fa-regular fa-copy text-base sm:text-lg"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Mokėjimo paskirtis -->
-                <div id="purpose-container" class="hidden">
-                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo paskirtis</label>
-                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
-                        <span id="purpose-text" class="text-xs sm:text-sm font-medium text-slate-700 truncate pr-12 select-all">-</span>
-                        <button onclick="copySingleField('purpose-text', this, 'Mokėjimo paskirtis')" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
-                            <i class="fa-regular fa-copy text-base sm:text-lg"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Trijų funkcinių mygtukų blokas (Fokusas į SUKURTI) -->
-                <div class="grid grid-cols-3 gap-2 sm:gap-3 pt-1">
-                    
-                    <!-- Kopijuoti viską mygtukas -->
-                    <button onclick="copyAllData(this)" class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200/60 transition-all active:scale-95 cursor-pointer">
-                        <i id="copy-all-icon" class="fa-regular fa-copy text-base sm:text-lg mb-1"></i>
-                        <span id="copy-all-text" class="text-[10px] sm:text-[11px] font-medium whitespace-nowrap">Kopijuoti viską</span>
-                    </button>
-                    
-                    <!-- Pagrindinis ŽALIAS mygtukas: SUKURTI -->
-                    <a href="./sukurti.html" class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md shadow-emerald-100 transition-all active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-plus text-base sm:text-lg mb-1"></i>
-                        <span class="text-[10px] sm:text-[11px] font-bold">Sukurti</span>
-                    </a>
-                    
-                    <!-- QR mygtukas -->
-                    <button onclick="toggleQR()" class="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/60 text-slate-600 transition-all active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-qrcode text-base sm:text-lg mb-1"></i>
-                        <span class="text-[10px] sm:text-[11px] font-medium">QR kodas</span>
-                    </button>
-                </div>
-
-                <!-- Paslėptas QR Kodo blokas -->
-                <div id="qr-wrapper" class="hidden pt-3 flex flex-col items-center justify-center border-t border-slate-100 transition-all animate-fade-in">
-                    <div id="qrcode" class="p-2 bg-white rounded-xl border border-slate-200/60 shadow-xs"></div>
-                    <p class="text-[10px] text-slate-400 mt-1.5 font-medium">Skenuokite nuorodos atidarymui</p>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <!-- Fiksuotas footeris pačioje apačioje -->
-    <footer class="text-center pt-2 pb-1 text-xs text-slate-400 font-medium shrink-0">
-        Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
-    </footer>
-
-    <!-- Iššokantis dialogas (Toast Notification) -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
-        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
-        <span id="toast-message">Nukopijuota!</span>
-    </div>
-
-    <!-- CSS animacijos ir pritaikymai -->
-    <style>
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
-        
-        /* Toast aktyvios būsenos klasės */
-        .toast-show { opacity: 1 !important; transform: translate(-50%, 0) !important; }
-    </style>
-
-    <script>
-        document.getElementById('year').innerText = new Date().getFullYear();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const iban = urlParams.get('i');
-        const name = urlParams.get('g');
-        const purpose = urlParams.get('p');
-        const amount = urlParams.get('s');
-
-        if (!iban && !name) {
-            document.getElementById('recipient-name').innerText = "Jūratė (Arbatpinigiai)";
-            document.getElementById('iban-text').innerText = "LT001234567890123456";
-            document.getElementById('purpose-container').classList.remove('hidden');
-            document.getElementById('purpose-text').innerText = "Arbatpinigiai";
-            document.getElementById('amount-container').classList.remove('hidden');
-            document.getElementById('amount-value').innerText = "5.00";
-        } else {
-            if (name) document.getElementById('recipient-name').innerText = decodeURIComponent(name);
-            if (iban) document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
-            
-            if (purpose) {
-                document.getElementById('purpose-container').classList.remove('hidden');
-                document.getElementById('purpose-text').innerText = decodeURIComponent(purpose);
-            }
-            
-            if (amount) {
-                document.getElementById('amount-container').classList.remove('hidden');
-                document.getElementById('amount-value').innerText = parseFloat(amount).toFixed(2);
-            }
-        }
-
-        new QRCode(document.getElementById("qrcode"), {
-            text: window.location.href,
-            width: 110,
-            height: 110,
-            colorDark : "#0f172a",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-
-        // Funkcija, parodanti iškylančią žinutę
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = message;
-            
-            toast.classList.add('toast-show');
-            
-            // Paslepiame po 2 sekundžių (švelniai fadina out)
-            setTimeout(() => {
-                toast.classList.remove('toast-show');
-            }, 2000);
-        }
-
-        // Vieno lauko kopijavimas
-        function copySingleField(elementId, button, fieldName) {
-            const text = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(text).then(() => {
                 const icon = button.querySelector('i');
                 const oldClass = icon.className;
                 
-                // Mygtuko ikonėlės animacija
                 icon.className = "fa-solid fa-check text-emerald-600";
                 
-                // Parodome dialogą apačioje
-                showToast(`${fieldName} sėkmingai nukopijuotas!`);
+                // Sutrumpiname rodomą tekstą pranešime, jei jis ilgesnis nei 20 simbolių
+                const shortText = text.length > 20 ? text.substring(0, 17) + '...' : text;
+                showToast(`„${shortText}“ sėkmingai nukopijuotas!`);
                 
                 setTimeout(() => { icon.className = oldClass; }, 1500);
             });
         }
 
-        // Viskos informacijos kopijavimas
+        // Visų duomenų kopijavimas
         function copyAllData(button) {
             const currentName = document.getElementById('recipient-name').innerText;
             const currentIban = document.getElementById('iban-text').innerText;
@@ -398,12 +183,10 @@
             let textToCopy = `${currentName}\n${currentIban}`;
             
             if (hasPurpose) {
-                const currentPurpose = document.getElementById('purpose-text').innerText;
-                textToCopy += `\n${currentPurpose}`;
+                textToCopy += `\n${document.getElementById('purpose-text').innerText}`;
             }
             if (hasAmount) {
-                const currentAmount = document.getElementById('amount-value').innerText;
-                textToCopy += `\n${currentAmount} €`;
+                textToCopy += `\n${document.getElementById('amount-wrapper').innerText}`;
             }
 
             navigator.clipboard.writeText(textToCopy).then(() => {
@@ -411,25 +194,18 @@
                 const text = document.getElementById('copy-all-text');
                 
                 button.classList.add('border-emerald-200', 'bg-emerald-50', 'text-emerald-600');
-                icon.className = "fa-solid fa-check text-base mb-1 text-emerald-600";
+                icon.className = "fa-solid fa-check text-emerald-600";
                 text.innerText = "Nukopijuota!";
                 
-                showToast("Visi duomenys nukopijuoti į iškarpinę!");
+                showToast("Visi mokėjimo duomenys nukopijuoti!");
                 
                 setTimeout(() => {
                     button.classList.remove('border-emerald-200', 'bg-emerald-50', 'text-emerald-600');
-                    icon.className = "fa-regular fa-copy text-base mb-1";
+                    icon.className = "fa-regular fa-copy";
                     text.innerText = "Kopijuoti viską";
                 }, 1500);
             });
         }
-
-        function toggleQR() {
-            const qrWrapper = document.getElementById('qr-wrapper');
-            qrWrapper.classList.toggle('hidden');
-        }
     </script>
 </body>
 </html>
-
-
