@@ -20,22 +20,22 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between items-center p-4 antialiased overflow-x-hidden">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-center items-center p-4 antialiased">
 
-    <div class="flex-1 flex flex-col justify-center items-center w-full max-w-md py-2 md:py-6">
+    <div class="w-full max-w-md flex flex-col items-center gap-4">
         
-        <main class="bg-white w-full rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col">
+        <main class="bg-white w-full rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col shrink-0">
             
-            <div class="w-full aspect-[2.5/1] sm:aspect-[1.91/1] bg-slate-100 relative shrink-0 overflow-hidden border-b border-slate-100">
+            <div class="w-full aspect-[1.91/1] bg-slate-100 relative shrink-0 overflow-hidden border-b border-slate-100">
                 <img id="top-banner" src="" alt="Banner" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-linear-to-t from-slate-900/10 to-transparent"></div>
             </div>
 
-            <div class="p-4 sm:p-6 space-y-2.5 sm:space-y-3.5">
+            <div class="p-4 sm:p-6 space-y-3.5">
                 
                 <div>
-                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-0.5 sm:mb-1">Gavėjas</label>
-                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2 sm:p-3 hover:border-slate-300 transition-colors">
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo gavėjas</label>
+                    <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
                         
                         <div class="absolute left-2 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 overflow-hidden border border-slate-300/40 select-none">
                             <img id="user-avatar" src="" alt="" class="w-full h-full object-cover hidden">
@@ -51,7 +51,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-0.5 sm:mb-1">Sąskaitos numeris (IBAN)</label>
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Sąskaitos numeris (IBAN)</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
                         <span id="iban-text" class="font-mono text-xs sm:text-sm font-medium text-slate-700 break-all pr-12 select-all">LT000000000000000000</span>
                         <button onclick="copySingleField('iban-text', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
@@ -61,7 +61,7 @@
                 </div>
 
                 <div id="purpose-container" class="hidden">
-                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-0.5 sm:mb-1">Mokėjimo paskirtis</label>
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo paskirtis</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
                         <span id="purpose-text" class="text-sm font-medium text-slate-700 truncate pr-12 select-all">-</span>
                         <button onclick="copySingleField('purpose-text', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
@@ -71,7 +71,7 @@
                 </div>
 
                 <div id="amount-container" class="hidden">
-                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-0.5 sm:mb-1">Suma (EUR)</label>
+                    <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo suma (EUR)</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
                         <span id="amount-value" class="text-sm font-medium text-slate-700 select-all">0.00</span>
                         <button onclick="copySingleField('amount-value', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 pt-1 sm:pt-2 shrink-0">
+                <div class="grid grid-cols-2 gap-3 pt-2">
                     <button onclick="copyAllData(this)" class="flex items-center justify-center gap-2 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200/60 font-medium text-xs sm:text-sm transition-all active:scale-95 cursor-pointer">
                         <i id="copy-all-icon" class="fa-regular fa-copy text-base"></i>
                         <span id="copy-all-text">Kopijuoti viską</span>
@@ -94,11 +94,12 @@
 
             </div>
         </main>
-    </div>
 
-    <footer class="text-center text-xs text-slate-400 font-medium w-full pt-2 pb-1 shrink-0">
-        Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
-    </footer>
+        <footer class="text-center text-xs text-slate-400 font-medium w-full pb-1">
+            Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
+        </footer>
+        
+    </div>
 
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
