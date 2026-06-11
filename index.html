@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>pavedimu.lt – Greita ir paprasta dalinimasis pavedimo duomenimis</title>
+    <title>pavedimu.lt – Greita ir paprasta dalintis pavedimo duomenimis</title>
     
     <meta property="og:title" content="pavedimu.lt – Mokėjimo informacija" />
-    <meta property="og:description" content="Greita ir paprasta dalinimasis pavedimo duomenimis." />
+    <meta property="og:description" content="Patogus rekvizitų nukopijavimas greitam pavedimui." />
     <meta property="og:type" content="website" />
 
     <!-- Tailwind CSS v4 -->
@@ -19,38 +19,47 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         body { 
             font-family: 'Inter', sans-serif; 
-            height: 100dvh;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col justify-between p-4 md:p-6 antialiased overflow-hidden">
+<!-- Pašalintas overflow-hidden ir fiksuotas aukštis iš body, kad viskas skrolintųsi natūraliai -->
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-center items-center p-4 md:p-6 antialiased">
 
-    <!-- Pagrindinis turinys -->
-    <main class="flex-1 flex items-center justify-center w-full my-auto">
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col max-h-[85dvh]">
+    <!-- Pagrindinis konteineris, kuris centruoja kortelę, o footerį laiko apačioje -->
+    <div class="w-full max-w-md flex flex-col items-center gap-6 my-auto">
+        
+        <!-- Pagrindinė kortelė (pašalintas max-h ir vidinis skrolas) -->
+        <main class="bg-white w-full rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col">
             
-            <!-- Viršutinė dekoratyvinė dalis -->
-            <div class="p-4 text-center bg-linear-to-b from-slate-50 to-white border-b border-slate-100 shrink-0">
-                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 text-emerald-600">
-                    <i class="fa-solid fa-wallet text-lg"></i>
-                </div>
+            <!-- 1. Viršutinis OG formato baneris (1.91:1 santykis) -->
+            <div class="w-full aspect-[1.91/1] bg-slate-100 relative shrink-0 overflow-hidden border-b border-slate-100">
+                <img id="top-banner" src="" alt="Banner" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-linear-to-t from-slate-900/10 to-transparent"></div>
             </div>
 
-            <!-- Rekvizitų laukai (Visi vienodo stiliaus ir storio) -->
-            <div class="p-4 sm:p-6 space-y-3.5 overflow-y-auto">
+            <!-- Rekvizitų laukai (visiškai pašalintas vidinis overflow-y-auto) -->
+            <div class="p-4 sm:p-6 space-y-3.5">
                 
-                <!-- 1. GAVĖJAS -->
+                <!-- 2. GAVĖJAS -->
                 <div>
                     <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo gavėjas</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
-                        <span id="recipient-name" class="text-sm font-medium text-slate-700 truncate pr-12 select-all">Kraunama...</span>
+                        
+                        <!-- Kvadratinė nuotrauka arba tekstinis placeholderis -->
+                        <div class="absolute left-2 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 overflow-hidden border border-slate-300/40 select-none">
+                            <img id="user-avatar" src="" alt="" class="w-full h-full object-cover hidden">
+                            <span id="user-avatar-initial" class="text-xs sm:text-sm font-semibold uppercase text-slate-500">?</span>
+                        </div>
+
+                        <span id="recipient-name" class="text-sm font-medium text-slate-700 truncate pl-9 sm:pl-11 pr-12 select-all">Kraunama...</span>
+                        
                         <button onclick="copySingleField('recipient-name', this)" class="absolute right-2 text-slate-400 hover:text-emerald-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
                             <i class="fa-regular fa-copy text-base"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- 2. IBAN SĄSNAITA -->
+                <!-- 3. IBAN SĄSNAITA -->
                 <div>
                     <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Sąskaitos numeris (IBAN)</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
@@ -61,7 +70,7 @@
                     </div>
                 </div>
 
-                <!-- 3. MOKĖJIMO PASKIRTIS -->
+                <!-- 4. MOKĖJIMO PASKIRTIS -->
                 <div id="purpose-container" class="hidden">
                     <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo paskirtis</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
@@ -72,7 +81,7 @@
                     </div>
                 </div>
 
-                <!-- 4. SUMA (EUR) -->
+                <!-- 5. SUMA (EUR) -->
                 <div id="amount-container" class="hidden">
                     <label class="block text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mokėjimo suma (EUR)</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
@@ -85,14 +94,11 @@
 
                 <!-- Dviejų funkcinių mygtukų blokas -->
                 <div class="grid grid-cols-2 gap-3 pt-2 shrink-0">
-                    
-                    <!-- Kopijuoti viską mygtukas -->
                     <button onclick="copyAllData(this)" class="flex items-center justify-center gap-2 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200/60 font-medium text-xs sm:text-sm transition-all active:scale-95 cursor-pointer">
                         <i id="copy-all-icon" class="fa-regular fa-copy text-base"></i>
                         <span id="copy-all-text">Kopijuoti viską</span>
                     </button>
                     
-                    <!-- Pagrindinis ŽALIAS mygtukas: SUKURTI -->
                     <a href="./sukurti.html" class="flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md shadow-emerald-100 font-bold text-xs sm:text-sm transition-all active:scale-95 cursor-pointer">
                         <i class="fa-solid fa-plus text-base"></i>
                         <span>Sukurti nuorodą</span>
@@ -100,23 +106,14 @@
                 </div>
 
             </div>
-        </div>
-    </main>
+        </main>
 
-    <!-- Fiksuotas footeris -->
-    <footer class="text-center pt-2 pb-1 text-xs text-slate-400 font-medium shrink-0">
-        Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
-    </footer>
-
-    <!-- Iššokantis pranešimas (Toast) -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300 max-w-[90vw]">
-        <i class="fa-solid fa-circle-check text-emerald-400 text-base shrink-0"></i>
-        <span id="toast-message" class="truncate">Nukopijuota!</span>
+        <!-- Footeris dabar įdėtas į bendrą srautą iškart po kortele, juda kartu -->
+        <footer class="text-center text-xs text-slate-400 font-medium w-full pb-2">
+            Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
+        </footer>
+        
     </div>
-
-    <style>
-        .toast-show { opacity: 1 !important; transform: translate(-50%, 0) !important; }
-    </style>
 
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
@@ -126,43 +123,53 @@
         const name = urlParams.get('g');
         const purpose = urlParams.get('p');
         const amount = urlParams.get('s');
+        const bannerUrl = urlParams.get('b');
+        const avatarUrl = urlParams.get('a');
+
+        // Banerio nustatymas
+        const bannerImg = document.getElementById('top-banner');
+        if (bannerUrl) {
+            bannerImg.src = decodeURIComponent(bannerUrl);
+        } else {
+            bannerImg.src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop";
+        }
 
         // Užpildome UI duomenimis
         if (!iban && !name) {
-            document.getElementById('recipient-name').innerText = "Jūratė (Arbatpinigiai)";
+            const defaultName = "Jūratė (Arbatpinigiai)";
+            document.getElementById('recipient-name').innerText = defaultName;
             document.getElementById('iban-text').innerText = "LT001234567890123456";
-            
             document.getElementById('purpose-container').classList.remove('hidden');
             document.getElementById('purpose-text').innerText = "Arbatpinigiai";
-            
             document.getElementById('amount-container').classList.remove('hidden');
             document.getElementById('amount-value').innerText = "5.00";
+            document.getElementById('user-avatar-initial').innerText = defaultName.charAt(0);
         } else {
             if (name) {
-                document.getElementById('recipient-name').innerText = decodeURIComponent(name);
+                const decodedName = decodeURIComponent(name);
+                document.getElementById('recipient-name').innerText = decodedName;
+                document.getElementById('user-avatar-initial').innerText = decodedName.trim().charAt(0);
             }
-            if (iban) {
-                document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
-            }
+            if (iban) document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
+            
             if (purpose) {
                 document.getElementById('purpose-container').classList.remove('hidden');
                 document.getElementById('purpose-text').innerText = decodeURIComponent(purpose);
             }
+            
             if (amount) {
                 document.getElementById('amount-container').classList.remove('hidden');
                 document.getElementById('amount-value').innerText = parseFloat(amount).toFixed(2);
             }
         }
 
-        // Funkcija pranešimo rodymui
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            
-            toastMsg.innerText = message;
-            
-            toast.classList.add('toast-show');
-            setTimeout(() => { toast.classList.remove('toast-show'); }, 2200);
+        // Avataro nustatymas
+        const avatarImg = document.getElementById('user-avatar');
+        const avatarInitial = document.getElementById('user-avatar-initial');
+        if (avatarUrl) {
+            avatarImg.src = decodeURIComponent(avatarUrl);
+            avatarImg.classList.remove('hidden');
+            avatarInitial.classList.add('hidden');
         }
 
         // Vieno lauko kopijavimas
@@ -171,12 +178,7 @@
             navigator.clipboard.writeText(text).then(() => {
                 const icon = button.querySelector('i');
                 const oldClass = icon.className;
-                
                 icon.className = "fa-solid fa-check text-emerald-600";
-                
-                const shortText = text.length > 20 ? text.substring(0, 17) + '...' : text;
-                showToast(`„${shortText}“ sėkmingai nukopijuotas!`);
-                
                 setTimeout(() => { icon.className = oldClass; }, 1500);
             });
         }
@@ -190,12 +192,8 @@
 
             let textToCopy = `${currentName}\n${currentIban}`;
             
-            if (hasPurpose) {
-                textToCopy += `\n${document.getElementById('purpose-text').innerText}`;
-            }
-            if (hasAmount) {
-                textToCopy += `\n${document.getElementById('amount-value').innerText}`;
-            }
+            if (hasPurpose) textToCopy += `\n${document.getElementById('purpose-text').innerText}`;
+            if (hasAmount) textToCopy += `\n${document.getElementById('amount-value').innerText}`;
 
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const icon = document.getElementById('copy-all-icon');
@@ -204,8 +202,6 @@
                 button.classList.add('border-emerald-200', 'bg-emerald-50', 'text-emerald-600');
                 icon.className = "fa-solid fa-check text-emerald-600";
                 text.innerText = "Nukopijuota!";
-                
-                showToast("Visi mokėjimo duomenys nukopijuoti!");
                 
                 setTimeout(() => {
                     button.classList.remove('border-emerald-200', 'bg-emerald-50', 'text-emerald-600');
