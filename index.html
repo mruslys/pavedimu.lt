@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>pavedimu.lt – Greitas ir saugus rekvizitų dalinimasis</title>
     
-    <!-- Open Graph bendras vaizdas (kol kas) -->
     <meta property="og:title" content="pavedimu.lt – Mokėjimo informacija" />
     <meta property="og:description" content="Patogus rekvizitų nukopijavimas ir QR kodas greitam pavedimui." />
     <meta property="og:type" content="website" />
 
-    <!-- Tailwind CSS v4 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
-    <!-- QR kodų generavimo biblioteka -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
@@ -23,88 +22,91 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between p-4 antialiased">
 
-    <!-- Pagrindinis konteineris -->
-    <main class="flex-1 flex items-center justify-center py-8">
+    <main class="flex-1 flex flex-col items-center justify-center py-8">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
             
-            <!-- Viršutinė dalis (Gavėjas ir Suma) -->
             <div class="p-6 text-center bg-linear-to-b from-slate-50 to-white border-b border-slate-100">
                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 text-blue-600 mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
+                    <i class="fa-solid fa-user text-xl"></i>
                 </div>
                 <h1 id="recipient-name" class="text-xl font-bold text-slate-900 tracking-tight">Kraunama...</h1>
                 
-                <!-- Sumos blokas (pasirodo tik jei nurodyta) -->
                 <div id="amount-container" class="hidden mt-3">
                     <span id="amount-value" class="text-3xl font-extrabold text-slate-900">0.00</span>
                     <span class="text-xl font-bold text-slate-900"> €</span>
                 </div>
             </div>
 
-            <!-- Rekvizitų laukai -->
             <div class="p-6 space-y-4">
                 
-                <!-- IBAN sąskaita -->
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sąskaitos numeris (IBAN)</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-3 hover:border-slate-300 transition-colors">
                         <span id="iban-text" class="font-mono text-sm font-medium text-slate-700 break-all pr-12 select-all">LT000000000000000000</span>
-                        <button onclick="copyToClipboard('iban-text', this)" class="absolute right-2 text-slate-400 hover:text-blue-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M480 400L288 400C279.2 400 272 392.8 272 384L272 128C272 119.2 279.2 112 288 112L421.5 112C425.7 112 429.8 113.7 432.8 116.7L491.3 175.2C494.3 178.2 496 182.3 496 186.5L496 384C496 392.8 488.8 400 480 400zM288 448L480 448C515.3 448 544 419.3 544 384L544 186.5C544 169.5 537.3 153.2 525.3 141.2L466.7 82.7C454.7 70.7 438.5 64 421.5 64L288 64C252.7 64 224 92.7 224 128L224 384C224 419.3 252.7 448 288 448zM160 192C124.7 192 96 220.7 96 256L96 512C96 547.3 124.7 576 160 576L352 576C387.3 576 416 547.3 416 512L416 496L368 496L368 512C368 520.8 360.8 528 352 528L160 528C151.2 528 144 520.8 144 512L144 256C144 247.2 151.2 240 160 240L176 240L176 192L160 192z"/></svg>
+                        <button onclick="copySingleField('iban-text', this)" class="absolute right-2 text-slate-400 hover:text-blue-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-regular fa-copy text-lg"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Mokėjimo paskirtis (pasirodo tik jei nurodyta) -->
                 <div id="purpose-container" class="hidden">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Mokėjimo paskirtis</label>
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-3 hover:border-slate-300 transition-colors">
                         <span id="purpose-text" class="text-sm font-medium text-slate-700 truncate pr-12 select-all">-</span>
-                        <button onclick="copyToClipboard('purpose-text', this)" class="absolute right-2 text-slate-400 hover:text-blue-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M480 400L288 400C279.2 400 272 392.8 272 384L272 128C272 119.2 279.2 112 288 112L421.5 112C425.7 112 429.8 113.7 432.8 116.7L491.3 175.2C494.3 178.2 496 182.3 496 186.5L496 384C496 392.8 488.8 400 480 400zM288 448L480 448C515.3 448 544 419.3 544 384L544 186.5C544 169.5 537.3 153.2 525.3 141.2L466.7 82.7C454.7 70.7 438.5 64 421.5 64L288 64C252.7 64 224 92.7 224 128L224 384C224 419.3 252.7 448 288 448zM160 192C124.7 192 96 220.7 96 256L96 512C96 547.3 124.7 576 160 576L352 576C387.3 576 416 547.3 416 512L416 496L368 496L368 512C368 520.8 360.8 528 352 528L160 528C151.2 528 144 520.8 144 512L144 256C144 247.2 151.2 240 160 240L176 240L176 192L160 192z"/></svg>
+                        <button onclick="copySingleField('purpose-text', this)" class="absolute right-2 text-slate-400 hover:text-blue-600 p-2 rounded-lg hover:bg-white transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-regular fa-copy text-lg"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- QR Kodas -->
-                <div class="pt-2 flex flex-col items-center justify-center border-t border-slate-100">
+                <div class="grid grid-cols-3 gap-3 pt-2">
+                    <a href="https://pavedimu.lt/sukurti" class="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/60 text-slate-600 transition-all active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-plus text-lg mb-1"></i>
+                        <span class="text-[11px] font-medium">Sukurti</span>
+                    </a>
+                    
+                    <button onclick="copyAllData(this)" class="flex flex-col items-center justify-center p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl border border-blue-100 transition-all active:scale-95 cursor-pointer">
+                        <i id="copy-all-icon" class="fa-regular fa-copy text-lg mb-1"></i>
+                        <span id="copy-all-text" class="text-[11px] font-medium">Kopijuoti viską</span>
+                    </button>
+                    
+                    <button onclick="toggleQR()" class="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/60 text-slate-600 transition-all active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-qrcode text-lg mb-1"></i>
+                        <span class="text-[11px] font-medium">QR kodas</span>
+                    </button>
+                </div>
+
+                <div id="qr-wrapper" class="hidden pt-4 flex flex-col items-center justify-center border-t border-slate-100 transition-all">
                     <div id="qrcode" class="p-3 bg-white rounded-2xl border border-slate-200/60 shadow-xs"></div>
-                    <p class="text-[11px] text-slate-400 mt-2 font-medium">Nuskenuokite kodą, kad atidarytumėte šį puslapį telefone</p>
+                    <p class="text-[11px] text-slate-400 mt-2 font-medium">Nuskenuokite kodą nuorodos atidarymui</p>
                 </div>
 
             </div>
         </div>
     </main>
 
-    <!-- Puslapio apačia (Footer) -->
     <footer class="text-center pb-4 text-xs text-slate-400 font-medium">
         Saugus rekvizitų dalinimasis &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
     </footer>
 
-    <!-- LOGIKA (JavaScript) -->
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
 
-        // 1. Pasiimame parametrus iš URL (pvz: ?i=LT123&g=Jonas&p=Uz%20Arbata&s=5)
         const urlParams = new URLSearchParams(window.location.search);
-        
         const iban = urlParams.get('i');
         const name = urlParams.get('g');
         const purpose = urlParams.get('p');
         const amount = urlParams.get('s');
 
-        // Jei URL tuščias – nukreipiame arba parodome demo duomenis
+        // Užpildome UI duomenimis
         if (!iban && !name) {
-            document.getElementById('recipient-name').innerText = "Vardas Pavardė / Įmonė";
+            document.getElementById('recipient-name').innerText = "Jūratė (Arbatpinigiai)";
             document.getElementById('iban-text').innerText = "LT001234567890123456";
             document.getElementById('purpose-container').classList.remove('hidden');
-            document.getElementById('purpose-text').innerText = "Pavyzdinė paskirtis";
+            document.getElementById('purpose-text').innerText = "Arbatpinigiai";
             document.getElementById('amount-container').classList.remove('hidden');
-            document.getElementById('amount-value').innerText = "10.00";
+            document.getElementById('amount-value').innerText = "5.00";
         } else {
-            // Suklijuojame gautus duomenis į UI
             if (name) document.getElementById('recipient-name').innerText = decodeURIComponent(name);
             if (iban) document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
             
@@ -119,40 +121,67 @@
             }
         }
 
-        // 2. QR kodo generavimas (atvaizduoja tikslų esamą URL)
+        // Sugeneruojame QR kodą fone (bet jis paslėptas)
         new QRCode(document.getElementById("qrcode"), {
             text: window.location.href,
             width: 140,
             height: 140,
-            colorDark : "#0f172a", // slate-900
+            colorDark : "#0f172a",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });
 
-        // 3. Kopijavimo funkcija su vizualiu grįžtamuoju ryšiu
-        function copyToClipboard(elementId, button) {
-            const textToCopy = document.getElementById(elementId).innerText;
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                // Išsisaugome seną ikoną
+        // Vieno lauko kopijavimas
+        function copySingleField(elementId, button) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
                 const oldIcon = button.innerHTML;
-                
-                // Įdedame žalią varnelę
-                button.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-emerald-600">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
-                `;
-                
-                // Po 1.5 sekundės grąžiname seną ikoną
-                setTimeout(() => {
-                    button.innerHTML = oldIcon;
-                }, 1500);
-            }).catch(err => {
-                console.error('Nepavyko nukopijuoti: ', err);
+                button.innerHTML = `<i class="fa-solid fa-check text-emerald-600 text-lg"></i>`;
+                setTimeout(() => { button.innerHTML = oldIcon; }, 1500);
             });
+        }
+
+        // „KOPIJUOTI VISKĄ“ FUNKCIJA (jūsų sugalvotas formatas)
+        function copyAllData(button) {
+            const currentName = document.getElementById('recipient-name').innerText;
+            const currentIban = document.getElementById('iban-text').innerText;
+            const hasPurpose = !document.getElementById('purpose-container').classList.contains('hidden');
+            const hasAmount = !document.getElementById('amount-container').classList.contains('hidden');
+
+            let textToCopy = `${currentName}\n${currentIban}`;
+            
+            if (hasPurpose) {
+                const currentPurpose = document.getElementById('purpose-text').innerText;
+                textToCopy += `\n${currentPurpose}`;
+            }
+            if (hasAmount) {
+                const currentAmount = document.getElementById('amount-value').innerText;
+                textToCopy += `\n${currentAmount} €`;
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const icon = document.getElementById('copy-all-icon');
+                const text = document.getElementById('copy-all-text');
+                
+                // Animacija
+                icon.className = "fa-solid fa-check text-lg mb-1 text-emerald-600";
+                text.innerText = "Nukopijuota!";
+                
+                setTimeout(() => {
+                    icon.className = "fa-regular fa-copy text-lg mb-1";
+                    text.innerText = "Kopijuoti viską";
+                }, 1500);
+            });
+        }
+
+        // QR kodo rodymas / slėpimas
+        function toggleQR() {
+            const qrWrapper = document.getElementById('qr-wrapper');
+            qrWrapper.classList.toggle('hidden');
+            if (!qrWrapper.classList.contains('hidden')) {
+                qrWrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
     </script>
 </body>
 </html>
-
