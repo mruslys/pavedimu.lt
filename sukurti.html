@@ -19,27 +19,36 @@
 
         <main class="bg-white w-full rounded-3xl shadow-xl shadow-zinc-200/40 border border-zinc-100/80 p-5 sm:p-6 flex flex-col gap-4">
             
-            <div class="border-b border-zinc-100 pb-3.5 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <button onclick="fillSampleData()" class="w-11 h-11 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-emerald-600 border border-zinc-200/60 hover:border-emerald-500 rounded-xl flex items-center justify-center text-lg shrink-0 shadow-xs hover:shadow-md hover:shadow-emerald-600/10 transition-all cursor-pointer group" title="Užpildyti pavyzdiniais duomenimis">
-                        <i class="fa-solid fa-wand-magic-sparkles group-hover:scale-105 transition-transform"></i>
-                    </button>
+            <div class="border-b border-zinc-100 pb-3 flex items-center justify-between">
+                <a href="./index.html" class="w-9 h-9 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-zinc-900 border border-zinc-200/60 hover:border-zinc-400 rounded-xl flex items-center justify-center text-sm shadow-xs hover:shadow-md hover:shadow-zinc-950/5 transition-all cursor-pointer group" title="Grįžti į pradžią">
+                    <i class="fa-solid fa-house group-hover:scale-105 transition-transform"></i>
+                </a>
 
-                    <button onclick="resetForm()" class="w-11 h-11 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-red-600 border border-zinc-200/60 hover:border-red-400 rounded-xl flex items-center justify-center text-lg shrink-0 shadow-xs hover:shadow-md hover:shadow-red-600/10 transition-all cursor-pointer group" title="Išvalyti formą">
-                        <i class="fa-solid fa-trash-can group-hover:scale-105 transition-transform"></i>
-                    </button>
-                </div>
-
-                <a href="./index.html" class="inline-block cursor-pointer tracking-tight text-right leading-none">
-                    <span class="text-xl font-extrabold text-zinc-900 inline-block leading-none">pavedimu</span><span class="text-xl font-extrabold text-emerald-600 inline-block leading-none">.lt</span>
+                <a href="./index.html" class="inline-flex items-center cursor-pointer tracking-tight text-right leading-none">
+                    <i class="fa-solid fa-wallet text-emerald-600 mr-1.5 text-[0.95em]"></i>
+                    <span class="leading-none">
+                        <span class="text-xl font-extrabold text-zinc-900 inline-block leading-none">pavedimu</span><span class="text-xl font-extrabold text-emerald-600 inline-block leading-none">.lt</span>
+                    </span>
                 </a>
             </div>
 
-            <div class="mt-1 mb-1 flex flex-col gap-1">
-                <h2 class="text-sm font-bold text-zinc-800 uppercase tracking-wide">
-                    Nuoroda mokėjimams gauti
-                </h2>
-                <p class="text-xs text-zinc-400">Suveskite duomenis dalinimuisi.</p>
+            <div class="mt-1 mb-1 flex items-center justify-between gap-4">
+                <div class="flex flex-col gap-1">
+                    <h2 class="text-sm font-bold text-zinc-800 uppercase tracking-wide">
+                        Nuoroda mokėjimams gauti
+                    </h2>
+                    <p class="text-xs text-zinc-400">Suveskite duomenis dalinimuisi.</p>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="fillSampleData()" class="w-10 h-10 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-emerald-600 border border-zinc-200/60 hover:border-emerald-500 rounded-xl flex items-center justify-center text-base shadow-xs hover:shadow-md hover:shadow-emerald-600/10 transition-all cursor-pointer group" title="Užpildyti pavyzdiniais duomenimis">
+                        <i class="fa-solid fa-wand-magic-sparkles group-hover:scale-105 transition-transform"></i>
+                    </button>
+
+                    <button onclick="resetForm()" class="w-10 h-10 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-red-600 border border-zinc-200/60 hover:border-red-400 rounded-xl flex items-center justify-center text-base shadow-xs hover:shadow-md hover:shadow-red-600/10 transition-all cursor-pointer group" title="Išvalyti formą">
+                        <i class="fa-solid fa-trash-can group-hover:scale-105 transition-transform"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="space-y-3.5">
@@ -88,7 +97,6 @@
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
 
-        // Užpildo pavyzdinius duomenis
         function fillSampleData() {
             document.getElementById('input-name').value = "Testas Testauskas";
             document.getElementById('input-iban').value = "LT000000000000000000";
@@ -99,7 +107,6 @@
             clearError('input-iban');
         }
 
-        // Visiškai išvalo formą ir paslepia rezultatus / klaidas
         function resetForm() {
             document.getElementById('input-name').value = "";
             document.getElementById('input-iban').value = "";
@@ -171,7 +178,6 @@
             urlAnchor.innerText = finalUrl;
             urlAnchor.href = finalUrl;
 
-            // PATAISYTA: .classList.remove vietoj .remove
             resultContainer.classList.remove('hidden');
             resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
