@@ -19,15 +19,27 @@
 
         <main class="bg-white w-full rounded-3xl shadow-xl shadow-zinc-200/40 border border-zinc-100/80 p-5 sm:p-6 flex flex-col gap-4">
             
-            <div class="border-b border-zinc-100 pb-3 flex items-center gap-3.5 text-left">
-                <a href="./index.html" class="w-11 h-11 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl flex items-center justify-center text-xl shrink-0 shadow-sm shadow-emerald-600/10 transition-colors cursor-pointer group" title="Į pradinį puslapį">
-                    <i class="fa-solid fa-money-bill-transfer group-hover:scale-105 transition-transform"></i>
-                </a>
-                
-                <div class="min-w-0">
-                    <h2 class="text-base font-bold text-zinc-900 leading-tight">Sukurti pavedimo nuorodą</h2>
-                    <p class="text-xs text-zinc-500 mt-0.5 truncate">Suveskite duomenis, kuriais norite dalintis.</p>
+            <div class="border-b border-zinc-100 pb-3.5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <button onclick="fillSampleData()" class="w-11 h-11 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-emerald-600 border border-zinc-200/60 hover:border-emerald-500 rounded-xl flex items-center justify-center text-lg shrink-0 shadow-xs hover:shadow-md hover:shadow-emerald-600/10 transition-all cursor-pointer group" title="Užpildyti pavyzdiniais duomenimis">
+                        <i class="fa-solid fa-wand-magic-sparkles group-hover:scale-105 transition-transform"></i>
+                    </button>
+
+                    <button onclick="resetForm()" class="w-11 h-11 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-red-600 border border-zinc-200/60 hover:border-red-400 rounded-xl flex items-center justify-center text-lg shrink-0 shadow-xs hover:shadow-md hover:shadow-red-600/10 transition-all cursor-pointer group" title="Išvalyti formą">
+                        <i class="fa-solid fa-trash-can group-hover:scale-105 transition-transform"></i>
+                    </button>
                 </div>
+
+                <a href="./index.html" class="inline-block cursor-pointer tracking-tight text-right leading-none">
+                    <span class="text-xl font-extrabold text-zinc-900 inline-block leading-none">pavedimu</span><span class="text-xl font-extrabold text-emerald-600 inline-block leading-none">.lt</span>
+                </a>
+            </div>
+
+            <div class="mt-1 mb-1 flex flex-col gap-1">
+                <h2 class="text-sm font-bold text-zinc-800 uppercase tracking-wide">
+                    Nuoroda mokėjimams gauti
+                </h2>
+                <p class="text-xs text-zinc-400">Suveskite duomenis dalinimuisi.</p>
             </div>
 
             <div class="space-y-3.5">
@@ -59,17 +71,16 @@
                 <span>Generuoti nuorodą</span>
             </button>
 
-            <div id="result-container" class="hidden mt-2 p-3 bg-emerald-50/60 border border-emerald-100 rounded-2xl flex items-center justify-between gap-3">
-                <span id="generated-url" class="text-xs font-mono text-emerald-800 truncate select-all flex-1 font-medium pl-1"></span>
-                <button onclick="copyLink(this)" class="bg-white text-emerald-600 hover:bg-emerald-600 hover:text-white border border-emerald-100 hover:border-transparent px-3 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-95 shrink-0 cursor-pointer">
-                    Kopijuoti
-                </button>
+            <div id="result-container" class="hidden mt-2">
+                <div class="p-3.5 bg-emerald-50/60 border border-emerald-100 rounded-2xl flex items-center justify-center">
+                    <a id="generated-url" href="#" class="text-xs font-mono text-emerald-700 hover:text-emerald-900 underline text-center break-all font-medium px-1 select-all transition-colors"></a>
+                </div>
             </div>
 
         </main>
 
         <footer class="text-center text-xs text-zinc-400 font-medium w-full pb-4 pt-2">
-            Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-zinc-500 hover:underline">pavedimu.lt</a>
+            Mokėjimai paprastai &copy; <span id="year"></span> – <a href="./index.html" class="text-zinc-500 hover:underline">pavedimu.lt</a>
         </footer>
         
     </div>
@@ -77,13 +88,38 @@
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
 
+        // Užpildo pavyzdinius duomenis
+        function fillSampleData() {
+            document.getElementById('input-name').value = "Testas Testauskas";
+            document.getElementById('input-iban').value = "LT000000000000000000";
+            document.getElementById('input-purpose').value = "Arbatpinigiai";
+            document.getElementById('input-amount').value = "10";
+
+            clearError('input-name');
+            clearError('input-iban');
+        }
+
+        // Visiškai išvalo formą ir paslepia rezultatus / klaidas
+        function resetForm() {
+            document.getElementById('input-name').value = "";
+            document.getElementById('input-iban').value = "";
+            document.getElementById('input-purpose').value = "";
+            document.getElementById('input-amount').value = "";
+
+            clearError('input-name');
+            clearError('input-iban');
+
+            document.getElementById('result-container').classList.add('hidden');
+        }
+
         function clearError(inputId) {
             const inputField = document.getElementById(inputId);
             const errorContainer = document.getElementById(inputId === 'input-name' ? 'error-name' : 'error-iban');
-            
-            inputField.classList.remove('border-red-500', 'focus:border-red-500');
-            inputField.classList.add('border-zinc-200/60', 'focus:border-emerald-600');
-            errorContainer.classList.add('hidden');
+            if (inputField && errorContainer) {
+                inputField.classList.remove('border-red-500', 'focus:border-red-500');
+                inputField.classList.add('border-zinc-200/60', 'focus:border-emerald-600');
+                errorContainer.classList.add('hidden');
+            }
         }
 
         function generateLink(button) {
@@ -100,71 +136,44 @@
             const amount = document.getElementById('input-amount').value;
 
             let hasError = false;
-
-            // Gavėjo lauko patikrinimas
             if (!name) {
-                nameField.classList.remove('border-zinc-200/60', 'focus:border-emerald-600');
                 nameField.classList.add('border-red-500', 'focus:border-red-500');
                 errorName.classList.remove('hidden');
                 hasError = true;
             }
 
-            // PAKEITIMAS: Dviejų lygių IBAN lauko validacija
             const cleanIban = iban.replace(/\s+/g, '').toUpperCase();
             if (!iban) {
-                // Jei visiškai tuščia
                 errorIbanText.innerText = "Būtina nurodyti";
-                ibanField.classList.remove('border-zinc-200/60', 'focus:border-emerald-600');
                 ibanField.classList.add('border-red-500', 'focus:border-red-500');
                 errorIban.classList.remove('hidden');
                 hasError = true;
             } else if (cleanIban.length !== 20) {
-                // Jei įvesta, bet ilgis neteisingas
                 errorIbanText.innerText = "Netinkamas formatas";
-                ibanField.classList.remove('border-zinc-200/60', 'focus:border-emerald-600');
                 ibanField.classList.add('border-red-500', 'focus:border-red-500');
                 errorIban.classList.remove('hidden');
                 hasError = true;
             }
 
-            if (hasError) {
-                resultContainer.classList.add('hidden');
-                return;
+            if (hasError) { 
+                resultContainer.classList.add('hidden'); 
+                return; 
             }
 
-            // Generavimas
             let pathSegments = [encodeURIComponent(name), cleanIban];
-
-            if (purpose || amount) {
-                pathSegments.push(purpose ? encodeURIComponent(purpose) : '-');
-            }
-            if (amount && amount > 0) {
-                pathSegments.push(parseFloat(amount).toFixed(2));
-            }
+            if (purpose || amount) pathSegments.push(purpose ? encodeURIComponent(purpose) : '-');
+            if (amount && amount > 0) pathSegments.push(parseFloat(amount).toFixed(2));
 
             const baseUrl = window.location.href.split('/').slice(0, -1).join('/') + '/';
-            let finalUrl = `${baseUrl}${pathSegments.join('/')}`;
+            const finalUrl = `${baseUrl}${pathSegments.join('/')}`;
 
-            const urlSpan = document.getElementById('generated-url');
-            urlSpan.innerText = finalUrl;
+            const urlAnchor = document.getElementById('generated-url');
+            urlAnchor.innerText = finalUrl;
+            urlAnchor.href = finalUrl;
+
+            // PATAISYTA: .classList.remove vietoj .remove
             resultContainer.classList.remove('hidden');
             resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function copyLink(button) {
-            const urlText = document.getElementById('generated-url').innerText;
-            navigator.clipboard.writeText(urlText).then(() => {
-                const oldText = button.innerText;
-                button.innerText = "Nukopijuota!";
-                button.classList.remove('bg-white', 'text-emerald-600', 'border-emerald-100');
-                button.classList.add('bg-emerald-600', 'text-white', 'border-transparent');
-                
-                setTimeout(() => {
-                    button.innerText = oldText;
-                    button.classList.remove('bg-emerald-600', 'text-white', 'border-transparent');
-                    button.classList.add('bg-white', 'text-emerald-600', 'border-emerald-100');
-                }, 2000);
-            });
         }
     </script>
 </body>
