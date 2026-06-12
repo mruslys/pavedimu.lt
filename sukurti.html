@@ -25,6 +25,7 @@
                 </a>
 
                 <a href="./index.html" class="inline-flex items-center cursor-pointer tracking-tight text-right leading-none">
+                    <i class="fa-solid fa-wallet text-emerald-600 mr-1.5 text-[0.95em]"></i>
                     <span class="leading-none">
                         <span class="text-xl font-extrabold text-zinc-900 inline-block leading-none">pavedimu</span><span class="text-xl font-extrabold text-emerald-600 inline-block leading-none">.lt</span>
                     </span>
@@ -34,7 +35,7 @@
             <div class="mt-1 mb-1 flex items-center justify-between gap-4">
                 <div class="flex flex-col gap-1">
                     <h2 class="text-sm font-bold text-zinc-800 uppercase tracking-wide">
-                        Mokėjimo informacija
+                        Mokėjimo duomenys
                     </h2>
                     <p class="text-xs text-zinc-400">Suveskite duomenis dalinimuisi</p>
                 </div>
@@ -74,14 +75,17 @@
                 </div>
             </div>
 
-            <button onclick="generateLink(this)" class="w-full flex items-center justify-center gap-2 py-3.5 bg-zinc-700 hover:bg-zinc-900 text-white rounded-2xl shadow-md shadow-zinc-950/10 font-semibold text-sm transition-all active:scale-98 cursor-pointer mt-2">
-                <i class="fa-solid fa-link text-base"></i>
-                <span>Generuoti nuorodą</span>
+            <!-- PAKEISTAS MYGTUKAS: GRĄŽINTA NUORODOS IKONA IR NAUJAS TEKSTAS -->
+            <button id="btn-submit" onclick="generateLink()" class="w-full flex items-center justify-center gap-2 py-3.5 bg-zinc-700 hover:bg-zinc-900 text-white rounded-2xl shadow-md shadow-zinc-950/10 font-semibold text-sm transition-all active:scale-98 cursor-pointer mt-2 disabled:opacity-75 disabled:cursor-not-allowed">
+                <i id="btn-icon" class="fa-solid fa-link text-sm"></i>
+                <span id="btn-text">Gauti nuorodą</span>
             </button>
 
-            <div id="result-container" class="hidden mt-2">
-                <div class="p-3.5 bg-emerald-50/60 border border-emerald-100 rounded-2xl flex items-center justify-center">
-                    <a id="generated-url" href="#" class="text-xs font-mono text-emerald-700 hover:text-emerald-900 underline text-center break-all font-medium px-1 select-all transition-colors"></a>
+            <!-- PAKEISTAS REZULTATO TEKSTAS -->
+            <div id="result-container" class="hidden mt-2 animate-fade-in">
+                <div class="p-4 bg-emerald-50/60 border border-emerald-100 rounded-2xl flex flex-col gap-2">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 text-center block">Mokėjimo duomenys pasiekiami adresu:</span>
+                    <a id="generated-url" href="#" target="_blank" class="text-xs font-mono text-emerald-700 hover:text-emerald-900 underline text-center break-all font-medium px-1 select-all transition-colors"></a>
                 </div>
             </div>
 
@@ -128,13 +132,17 @@
             }
         }
 
-        function generateLink(button) {
+        function generateLink() {
             const nameField = document.getElementById('input-name');
             const ibanField = document.getElementById('input-iban');
             const errorName = document.getElementById('error-name');
             const errorIban = document.getElementById('error-iban');
             const errorIbanText = document.getElementById('error-iban-text');
             const resultContainer = document.getElementById('result-container');
+            
+            const btnSubmit = document.getElementById('btn-submit');
+            const btnIcon = document.getElementById('btn-icon');
+            const btnText = document.getElementById('btn-text');
 
             const name = nameField.value.trim();
             const iban = ibanField.value.trim();
@@ -166,19 +174,33 @@
                 return; 
             }
 
-            let pathSegments = [encodeURIComponent(name), cleanIban];
-            if (purpose || amount) pathSegments.push(purpose ? encodeURIComponent(purpose) : '-');
-            if (amount && amount > 0) pathSegments.push(parseFloat(amount).toFixed(2));
+            // Krovimosi būsena
+            resultContainer.classList.add('hidden');
+            btnSubmit.disabled = true;
+            btnIcon.className = "fa-solid fa-circle-notch animate-spin text-sm";
+            btnText.innerText = "Kuriama...";
 
-            const baseUrl = window.location.href.split('/').slice(0, -1).join('/') + '/';
-            const finalUrl = `${baseUrl}${pathSegments.join('/')}`;
+            setTimeout(() => {
+                let pathSegments = [encodeURIComponent(name), cleanIban];
+                if (purpose || amount) pathSegments.push(purpose ? encodeURIComponent(purpose) : '-');
+                if (amount && amount > 0) pathSegments.push(parseFloat(amount).toFixed(2));
 
-            const urlAnchor = document.getElementById('generated-url');
-            urlAnchor.innerText = finalUrl;
-            urlAnchor.href = finalUrl;
+                const baseUrl = window.location.href.split('/').slice(0, -1).join('/') + '/';
+                const finalUrl = `${baseUrl}${pathSegments.join('/')}`;
 
-            resultContainer.classList.remove('hidden');
-            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                const urlAnchor = document.getElementById('generated-url');
+                urlAnchor.innerText = finalUrl;
+                urlAnchor.href = finalUrl;
+
+                // Atstatomas mygtukas su grandinės ikona
+                btnSubmit.disabled = false;
+                btnIcon.className = "fa-solid fa-link text-sm";
+                btnText.innerText = "Gauti nuorodą";
+
+                // Parodomas rezultatas
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 800);
         }
     </script>
 </body>
