@@ -24,10 +24,10 @@
 
     <div class="w-full max-w-md flex flex-col items-center gap-5">
         
-        <main class="bg-white w-full rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col shrink-0">
+        <main class="bg-white w-full rounded-3xl shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden flex flex-col">
             
             <div class="w-full aspect-[1.91/1] bg-slate-100 relative shrink-0 overflow-hidden border-b border-slate-100">
-                <img id="top-banner" src="" alt="Banner" class="w-full h-full object-cover">
+                <img id="top-banner" src="" alt="Mokėjimo baneris" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-linear-to-t from-slate-900/10 to-transparent"></div>
             </div>
 
@@ -38,7 +38,7 @@
                     <div class="relative flex items-center bg-slate-50 rounded-xl border border-slate-200/80 p-2.5 sm:p-3 hover:border-slate-300 transition-colors">
                         
                         <div class="absolute left-2 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 overflow-hidden border border-slate-300/40 select-none">
-                            <img id="user-avatar" src="" alt="" class="w-full h-full object-cover hidden">
+                            <img id="user-avatar" src="" alt="Profilis" class="w-full h-full object-cover hidden">
                             <span id="user-avatar-initial" class="text-xs sm:text-sm font-semibold uppercase text-slate-500">?</span>
                         </div>
 
@@ -95,7 +95,7 @@
             </div>
         </main>
 
-        <footer class="text-center text-xs text-slate-400 font-medium w-full pb-4">
+        <footer class="text-center text-xs text-slate-400 font-medium pb-4">
             Mokėjimai paprastai &copy; <span id="year"></span> – <a href="#" class="text-slate-600 hover:underline">pavedimu.lt</a>
         </footer>
         
@@ -114,11 +114,7 @@
 
         // Banerio nustatymas
         const bannerImg = document.getElementById('top-banner');
-        if (bannerUrl) {
-            bannerImg.src = decodeURIComponent(bannerUrl);
-        } else {
-            bannerImg.src = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop";
-        }
+        bannerImg.src = bannerUrl ? decodeURIComponent(bannerUrl) : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop";
 
         // Užpildome UI duomenimis
         if (!iban && !name) {
@@ -136,13 +132,13 @@
                 document.getElementById('recipient-name').innerText = decodedName;
                 document.getElementById('user-avatar-initial').innerText = decodedName.trim().charAt(0);
             }
-            if (iban) document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
-            
+            if (iban) {
+                document.getElementById('iban-text').innerText = decodeURIComponent(iban).replace(/\s+/g, '').toUpperCase();
+            }
             if (purpose) {
                 document.getElementById('purpose-container').classList.remove('hidden');
                 document.getElementById('purpose-text').innerText = decodeURIComponent(purpose);
             }
-            
             if (amount) {
                 document.getElementById('amount-container').classList.remove('hidden');
                 document.getElementById('amount-value').innerText = parseFloat(amount).toFixed(2);
@@ -150,12 +146,11 @@
         }
 
         // Avataro nustatymas
-        const avatarImg = document.getElementById('user-avatar');
-        const avatarInitial = document.getElementById('user-avatar-initial');
         if (avatarUrl) {
+            const avatarImg = document.getElementById('user-avatar');
             avatarImg.src = decodeURIComponent(avatarUrl);
             avatarImg.classList.remove('hidden');
-            avatarInitial.classList.add('hidden');
+            document.getElementById('user-avatar-initial').classList.add('hidden');
         }
 
         // Vieno lauko kopijavimas
