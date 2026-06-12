@@ -19,9 +19,7 @@
 
         <main class="bg-white w-full rounded-3xl shadow-xl shadow-zinc-200/40 border border-zinc-100/80 p-5 sm:p-6 flex flex-col gap-4">
             
-            <!-- Antraštės dalis su veikiančia pradinio puslapio ikona kairėje -->
             <div class="border-b border-zinc-100 pb-3 flex items-center gap-3.5 text-left">
-                <!-- Spaudžiama ikona, nukreipianti į index.html -->
                 <a href="./index.html" class="w-11 h-11 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl flex items-center justify-center text-xl shrink-0 shadow-sm shadow-emerald-600/10 transition-colors cursor-pointer group" title="Į pradinį puslapį">
                     <i class="fa-solid fa-money-bill-transfer group-hover:scale-105 transition-transform"></i>
                 </a>
@@ -32,40 +30,35 @@
                 </div>
             </div>
 
-            <!-- Formos laukai -->
             <div class="space-y-3.5">
                 <div>
-                    <!-- PAKEITIMAS: Paryškinta antraštės spalva į text-zinc-700 -->
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Mokėjimo gavėjas *</label>
-                    <input type="text" id="input-name" placeholder="Pvz.: Vardenis Pavardenis" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Gavėjas *</label>
+                    <input type="text" id="input-name" oninput="clearError('input-name')" placeholder="Pvz.: Vardenis Pavardenis" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <p id="error-name" class="hidden text-[11px] text-red-600 font-medium mt-1 pl-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>Būtina nurodyti</p>
                 </div>
 
                 <div>
-                    <!-- PAKEITIMAS: Paryškinta antraštės spalva į text-zinc-700 -->
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Sąskaitos numeris (IBAN) *</label>
-                    <input type="text" id="input-iban" placeholder="LT00 0000 0000 0000 0000" class="w-full text-sm font-mono bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <input type="text" id="input-iban" oninput="clearError('input-iban')" placeholder="LT00 0000 0000 0000 0000" class="w-full text-sm font-mono bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <p id="error-iban" class="hidden text-[11px] text-red-600 font-medium mt-1 pl-1"><i class="fa-solid fa-circle-exclamation mr-1"></i><span id="error-iban-text">Būtina nurodyti</span></p>
                 </div>
 
                 <div>
-                    <!-- PAKEITIMAS: Paryškinta antraštės spalva į text-zinc-700 -->
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Mokėjimo paskirtis <span class="text-zinc-400 font-normal lowercase">(neprivaloma)</span></label>
                     <input type="text" id="input-purpose" placeholder="Pvz.: Už vakarienę" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
                 </div>
 
                 <div>
-                    <!-- PAKEITIMAS: Paryškinta antraštės spalva į text-zinc-700 -->
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Suma, EUR <span class="text-zinc-400 font-normal lowercase">(neprivaloma)</span></label>
                     <input type="number" id="input-amount" step="0.01" min="0" placeholder="0.00" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
                 </div>
             </div>
 
-            <!-- Veiksmo mygtukas -->
             <button onclick="generateLink(this)" class="w-full flex items-center justify-center gap-2 py-3.5 bg-zinc-700 hover:bg-zinc-900 text-white rounded-2xl shadow-md shadow-zinc-950/10 font-semibold text-sm transition-all active:scale-98 cursor-pointer mt-2">
                 <i class="fa-solid fa-link text-base"></i>
                 <span>Generuoti nuorodą</span>
             </button>
 
-            <!-- Rezultato blokas -->
             <div id="result-container" class="hidden mt-2 p-3 bg-emerald-50/60 border border-emerald-100 rounded-2xl flex items-center justify-between gap-3">
                 <span id="generated-url" class="text-xs font-mono text-emerald-800 truncate select-all flex-1 font-medium pl-1"></span>
                 <button onclick="copyLink(this)" class="bg-white text-emerald-600 hover:bg-emerald-600 hover:text-white border border-emerald-100 hover:border-transparent px-3 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-95 shrink-0 cursor-pointer">
@@ -84,18 +77,62 @@
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
 
+        function clearError(inputId) {
+            const inputField = document.getElementById(inputId);
+            const errorContainer = document.getElementById(inputId === 'input-name' ? 'error-name' : 'error-iban');
+            
+            inputField.classList.remove('border-red-500', 'focus:border-red-500');
+            inputField.classList.add('border-zinc-200/60', 'focus:border-emerald-600');
+            errorContainer.classList.add('hidden');
+        }
+
         function generateLink(button) {
-            const name = document.getElementById('input-name').value.trim();
-            const iban = document.getElementById('input-iban').value.trim();
+            const nameField = document.getElementById('input-name');
+            const ibanField = document.getElementById('input-iban');
+            const errorName = document.getElementById('error-name');
+            const errorIban = document.getElementById('error-iban');
+            const errorIbanText = document.getElementById('error-iban-text');
+            const resultContainer = document.getElementById('result-container');
+
+            const name = nameField.value.trim();
+            const iban = ibanField.value.trim();
             const purpose = document.getElementById('input-purpose').value.trim();
             const amount = document.getElementById('input-amount').value;
 
-            if (!name || !iban) {
-                alert('Prašome užpildyti privalomus laukus: Gavėją ir IBAN sąskaitą.');
+            let hasError = false;
+
+            // Gavėjo lauko patikrinimas
+            if (!name) {
+                nameField.classList.remove('border-zinc-200/60', 'focus:border-emerald-600');
+                nameField.classList.add('border-red-500', 'focus:border-red-500');
+                errorName.classList.remove('hidden');
+                hasError = true;
+            }
+
+            // PAKEITIMAS: Dviejų lygių IBAN lauko validacija
+            const cleanIban = iban.replace(/\s+/g, '').toUpperCase();
+            if (!iban) {
+                // Jei visiškai tuščia
+                errorIbanText.innerText = "Būtina nurodyti";
+                ibanField.classList.remove('border-zinc-200/60', 'focus:border-emerald-600');
+                ibanField.classList.add('border-red-500', 'focus:border-red-500');
+                errorIban.classList.remove('hidden');
+                hasError = true;
+            } else if (cleanIban.length !== 20) {
+                // Jei įvesta, bet ilgis neteisingas
+                errorIbanText.innerText = "Netinkamas formatas";
+                ibanField.classList.remove('border-zinc-200/60', 'focus:border-emerald-600');
+                ibanField.classList.add('border-red-500', 'focus:border-red-500');
+                errorIban.classList.remove('hidden');
+                hasError = true;
+            }
+
+            if (hasError) {
+                resultContainer.classList.add('hidden');
                 return;
             }
 
-            const cleanIban = iban.replace(/\s+/g, '').toUpperCase();
+            // Generavimas
             let pathSegments = [encodeURIComponent(name), cleanIban];
 
             if (purpose || amount) {
@@ -108,9 +145,7 @@
             const baseUrl = window.location.href.split('/').slice(0, -1).join('/') + '/';
             let finalUrl = `${baseUrl}${pathSegments.join('/')}`;
 
-            const resultContainer = document.getElementById('result-container');
             const urlSpan = document.getElementById('generated-url');
-            
             urlSpan.innerText = finalUrl;
             resultContainer.classList.remove('hidden');
             resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
