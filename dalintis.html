@@ -117,6 +117,18 @@
         const purpose = urlParams.get('purpose');
         const amount = urlParams.get('amount');
 
+        // ====== DEBUGINIMO BLOKAS (Pašalinkite, kai viskas veiks) ======
+        console.log("--- pavedimu.lt Debug Informacija ---");
+        console.log("Pilnas naršyklės URL:", window.location.href);
+        console.log("Gauti parametrai iš Worker:");
+        console.log("-> name:", name ? decodeURIComponent(name) : "NERASTA/NULL");
+        console.log("-> iban:", iban ? decodeURIComponent(iban) : "NERASTA/NULL");
+        console.log("-> purpose:", purpose ? decodeURIComponent(purpose) : "NERASTA/NULL");
+        console.log("-> amount:", amount ? amount : "NERASTA/NULL");
+        console.log("-------------------------------------");
+        // ==============================================================
+                
+
         if (!name || !iban) {
             document.getElementById('error-card').classList.remove('hidden');
         } else {
