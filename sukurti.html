@@ -19,17 +19,23 @@
 
         <main class="bg-white/90 backdrop-blur-xl w-full rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(16,24,40,0.06)] border border-white p-5 sm:p-6 flex flex-col gap-4 relative overflow-hidden">
             
-            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-800/30 to-transparent"></div>
-
-<div class="flex flex-col items-center gap-2.5 pb-2 w-full max-w-xs mx-auto">
+            <div class="flex flex-col items-center gap-2.5 w-full max-w-xs mx-auto">
                 <a href="./index.html" class="flex items-center justify-center gap-2 cursor-pointer tracking-tight leading-none group text-2xl sm:text-3xl whitespace-nowrap shrink-0">
-                    <div class="text-[1.1em] text-emerald-600 select-none flex items-center justify-center">
+                    <div class="text-[1.1em] text-emerald-800 select-none flex items-center justify-center">
                         <i class="fa-solid fa-money-bill-transfer"></i>
                     </div>
                     <span class="font-black text-zinc-700">
-                        pavedimu<span class="text-emerald-600">.lt</span>
+                        pavedimu<span class="text-emerald-800">.lt</span>
                     </span>
                 </a>
+
+                <div class="flex items-center justify-center gap-2.5 text-[10px] font-bold uppercase tracking-widest text-emerald-800 select-none">
+                    <span>Greita</span>
+                    <span class="text-emerald-500/40 font-black">•</span>
+                    <span>Paprasta</span>
+                    <span class="text-emerald-500/40 font-black">•</span>
+                    <span>Saugu</span>
+                </div>
             </div>
 
             <div class="mt-1 mb-1 flex items-center justify-between gap-4">
@@ -37,7 +43,7 @@
                     <h2 class="text-xs font-bold text-zinc-800 uppercase tracking-wider">
                         Mokėjimo duomenys
                     </h2>
-                    <p class="text-[11px] text-zinc-400 font-medium">Suveskite duomenis dalinimuisi</p>
+                    <p class="text-[11px] text-zinc-400 font-medium">Suveskite pavedimo gavėjo informaciją</p>
                 </div>
 
                 <div class="flex items-center gap-2 shrink-0">
@@ -77,7 +83,7 @@
 
             <button id="btn-submit" onclick="generateLink()" class="w-full flex items-center justify-center gap-2.5 py-4 bg-emerald-900 hover:bg-emerald-950 text-white rounded-2xl shadow-lg shadow-emerald-950/15 font-semibold text-sm tracking-wide border border-emerald-700/40 transition-all duration-200 active:scale-[0.98] cursor-pointer mt-2 disabled:opacity-75 disabled:cursor-not-allowed group">
                 <i id="btn-icon" class="fa-solid fa-link text-white group-hover:text-emerald-200 transition-colors duration-200"></i>
-                <span id="btn-text" class="group-hover:text-emerald-200 transition-colors duration-200">Gauti nuorodą</span>
+                <span id="btn-text" class="group-hover:text-emerald-200 transition-colors duration-200">Kurti nuorodą</span>
             </button>
 
             <div id="result-container" class="hidden mt-2 animate-fade-in">
