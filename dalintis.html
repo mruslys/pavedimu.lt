@@ -111,25 +111,17 @@
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const name = urlParams.get('name');
-        const iban = urlParams.get('iban');
-        const purpose = urlParams.get('purpose');
-        const amount = urlParams.get('amount');
+        // Traukiame parametrus tiesiai iš URL kelio segmentų (atitinka Workerio struktūrą)
+        const pathSegments = window.location.pathname.split('/').filter(segment => segment !== '');
+        
+        // Kadangi url gali būti su sub-aplankais arba tiesioginis, paimame paskutinius segmentus, jei tai rekvizitai
+        // Tikėtina struktūra: [0]: Vardas, [1]: IBAN, [2]: Paskirtis, [3]: Suma
+        const name = pathSegments[0];
+        const iban = pathSegments[1];
+        const purpose = pathSegments[2];
+        const amount = pathSegments[3];
 
-        // ====== DEBUGINIMO BLOKAS (Pašalinkite, kai viskas veiks) ======
-        console.log("--- pavedimu.lt Debug Informacija ---");
-        console.log("Pilnas naršyklės URL:", window.location.href);
-        console.log("Gauti parametrai iš Worker:");
-        console.log("-> name:", name ? decodeURIComponent(name) : "NERASTA/NULL");
-        console.log("-> iban:", iban ? decodeURIComponent(iban) : "NERASTA/NULL");
-        console.log("-> purpose:", purpose ? decodeURIComponent(purpose) : "NERASTA/NULL");
-        console.log("-> amount:", amount ? amount : "NERASTA/NULL");
-        console.log("-------------------------------------");
-        // ==============================================================
-                
-
-        if (!name || !iban) {
+        if (!name || !iban || name.includes('.') || name === 'dalintis.html') {
             document.getElementById('error-card').classList.remove('hidden');
         } else {
             document.getElementById('main-card').classList.remove('hidden');
