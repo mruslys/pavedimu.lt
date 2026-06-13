@@ -13,39 +13,47 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-[#f9f9fb] text-zinc-900 min-h-[100dvh] flex flex-col justify-start items-center p-4 pt-4 sm:pt-12 antialiased">
+<body class="bg-radial from-zinc-50 via-zinc-100 to-zinc-200/70 text-zinc-900 min-h-[100dvh] flex flex-col justify-start items-center p-4 pt-4 sm:pt-12 antialiased selection:bg-emerald-800 selection:text-emerald-50">
 
     <div class="w-full max-w-md flex flex-col items-center gap-5">
 
-        <main class="bg-white w-full rounded-3xl shadow-xl shadow-zinc-200/40 border border-zinc-100/80 p-5 sm:p-6 flex flex-col gap-4">
+        <main class="bg-white/90 backdrop-blur-xl w-full rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(16,24,40,0.06)] border border-white p-5 sm:p-6 flex flex-col gap-4 relative overflow-hidden">
             
-            <div class="border-b border-zinc-100 pb-3 flex items-center justify-between">
-                <a href="./index.html" class="w-9 h-9 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-zinc-900 border border-zinc-200/60 hover:border-zinc-400 rounded-xl flex items-center justify-center text-sm shadow-xs hover:shadow-md hover:shadow-zinc-950/5 transition-all cursor-pointer group" title="Grįžti į pradžią">
-                    <i class="fa-solid fa-house group-hover:scale-105 transition-transform"></i>
-                </a>
+            <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-800/30 to-transparent"></div>
 
-                <a href="./index.html" class="inline-flex items-center cursor-pointer tracking-tight text-right leading-none">
-                    <i class="fa-solid fa-wallet text-emerald-600 mr-1.5 text-[0.95em]"></i>
-                    <span class="leading-none">
-                        <span class="text-xl font-extrabold text-zinc-900 inline-block leading-none">pavedimu</span><span class="text-xl font-extrabold text-emerald-600 inline-block leading-none">.lt</span>
+            <div class="border-b border-zinc-100/80 pb-3.5 flex items-center justify-between gap-4 w-full">
+                <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-emerald-800 select-none">
+                    <span>Greita</span>
+                    <span class="text-emerald-500/40 font-black">•</span>
+                    <span>Paprasta</span>
+		    <span class="text-emerald-500/40 font-black">•</span>
+                    <span>Saugu</span>
+                </div>
+
+                <a href="./index.html" class="flex items-center gap-2 cursor-pointer tracking-tight text-right leading-none shrink-0">
+                    <div class="text-xl text-emerald-600 select-none shrink-0 flex items-center justify-center">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                    </div>
+                    <span class="text-xl font-black text-zinc-700 leading-none shrink-0 whitespace-nowrap">
+                        pavedimu<span class="text-emerald-600">.lt</span>
                     </span>
                 </a>
             </div>
 
             <div class="mt-1 mb-1 flex items-center justify-between gap-4">
-                <div class="flex flex-col gap-1">
-                    <h2 class="text-sm font-bold text-zinc-800 uppercase tracking-wide">
+                <div class="flex flex-col gap-0.5">
+                    <h2 class="text-xs font-bold text-zinc-800 uppercase tracking-wider">
                         Mokėjimo duomenys
                     </h2>
-                    <p class="text-xs text-zinc-400">Suveskite duomenis dalinimuisi</p>
+                    <p class="text-[11px] text-zinc-400 font-medium">Suveskite duomenis dalinimuisi</p>
                 </div>
 
                 <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="fillSampleData()" class="w-10 h-10 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-emerald-600 border border-zinc-200/60 hover:border-emerald-500 rounded-xl flex items-center justify-center text-base shadow-xs hover:shadow-md hover:shadow-emerald-600/10 transition-all cursor-pointer group" title="Užpildyti pavyzdiniais duomenimis">
+                    <button onclick="fillSampleData()" class="w-9 h-9 bg-emerald-950/5 hover:bg-emerald-950/10 text-emerald-800 border border-transparent rounded-xl flex items-center justify-center text-sm transition-all cursor-pointer group" title="Užpildyti pavyzdiniais duomenimis">
                         <i class="fa-solid fa-wand-magic-sparkles group-hover:scale-105 transition-transform"></i>
                     </button>
 
-                    <button onclick="resetForm()" class="w-10 h-10 bg-zinc-50 hover:bg-white text-zinc-500 hover:text-red-600 border border-zinc-200/60 hover:border-red-400 rounded-xl flex items-center justify-center text-base shadow-xs hover:shadow-md hover:shadow-red-600/10 transition-all cursor-pointer group" title="Išvalyti formą">
+                    <button onclick="resetForm()" class="w-9 h-9 bg-zinc-100 hover:bg-zinc-200/70 text-zinc-500 hover:text-red-600 border border-transparent rounded-xl flex items-center justify-center text-sm transition-all cursor-pointer group" title="Išvalyti formą">
                         <i class="fa-solid fa-trash-can group-hover:scale-105 transition-transform"></i>
                     </button>
                 </div>
@@ -53,46 +61,44 @@
 
             <div class="space-y-3.5">
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Gavėjas *</label>
-                    <input type="text" id="input-name" oninput="clearError('input-name')" placeholder="Pvz.: Vardenis Pavardenis" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-zinc-700 mb-1">Gavėjas *</label>
+                    <input type="text" id="input-name" oninput="clearError('input-name')" placeholder="Pvz.: Vardenis Pavardenis" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400 font-medium">
                     <p id="error-name" class="hidden text-[11px] text-red-600 font-medium mt-1 pl-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>Būtina nurodyti</p>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Sąskaitos numeris (IBAN) *</label>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-zinc-700 mb-1">Sąskaitos numeris (IBAN) *</label>
                     <input type="text" id="input-iban" oninput="clearError('input-iban')" placeholder="LT00 0000 0000 0000 0000" class="w-full text-sm font-mono bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
                     <p id="error-iban" class="hidden text-[11px] text-red-600 font-medium mt-1 pl-1"><i class="fa-solid fa-circle-exclamation mr-1"></i><span id="error-iban-text">Būtina nurodyti</span></p>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Mokėjimo paskirtis <span class="text-zinc-400 font-normal lowercase">(neprivaloma)</span></label>
-                    <input type="text" id="input-purpose" placeholder="Pvz.: Už vakarienę" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-zinc-700 mb-1">Mokėjimo paskirtis <span class="text-zinc-400 font-normal lowercase">(neprivaloma)</span></label>
+                    <input type="text" id="input-purpose" placeholder="Pvz.: Už vakarienę" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400 font-medium">
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">Suma, EUR <span class="text-zinc-400 font-normal lowercase">(neprivaloma)</span></label>
-                    <input type="number" id="input-amount" step="0.01" min="0" placeholder="0.00" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-zinc-700 mb-1">Suma, EUR <span class="text-zinc-400 font-normal lowercase">(neprivaloma)</span></label>
+                    <input type="number" id="input-amount" step="0.01" min="0" placeholder="0.00" class="w-full text-sm bg-zinc-50 border border-zinc-200/60 rounded-xl px-3.5 py-2.5 focus:outline-hidden focus:border-emerald-600 focus:bg-white transition-all text-zinc-900 placeholder-zinc-400 font-medium">
                 </div>
             </div>
 
-            <!-- PAKEISTAS MYGTUKAS: GRĄŽINTA NUORODOS IKONA IR NAUJAS TEKSTAS -->
-            <button id="btn-submit" onclick="generateLink()" class="w-full flex items-center justify-center gap-2 py-3.5 bg-zinc-700 hover:bg-zinc-900 text-white rounded-2xl shadow-md shadow-zinc-950/10 font-semibold text-sm transition-all active:scale-98 cursor-pointer mt-2 disabled:opacity-75 disabled:cursor-not-allowed">
-                <i id="btn-icon" class="fa-solid fa-link text-sm"></i>
-                <span id="btn-text">Gauti nuorodą</span>
+            <button id="btn-submit" onclick="generateLink()" class="w-full flex items-center justify-center gap-2.5 py-4 bg-emerald-900 hover:bg-emerald-950 text-white rounded-2xl shadow-lg shadow-emerald-950/15 font-semibold text-sm tracking-wide border border-emerald-700/40 transition-all duration-200 active:scale-[0.98] cursor-pointer mt-2 disabled:opacity-75 disabled:cursor-not-allowed group">
+                <i id="btn-icon" class="fa-solid fa-link text-white group-hover:text-emerald-200 transition-colors duration-200"></i>
+                <span id="btn-text" class="group-hover:text-emerald-200 transition-colors duration-200">Gauti nuorodą</span>
             </button>
 
-            <!-- PAKEISTAS REZULTATO TEKSTAS -->
             <div id="result-container" class="hidden mt-2 animate-fade-in">
-                <div class="p-4 bg-emerald-50/60 border border-emerald-100 rounded-2xl flex flex-col gap-2">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-800 text-center block">Mokėjimo duomenys pasiekiami adresu:</span>
-                    <a id="generated-url" href="#" target="_blank" class="text-xs font-mono text-emerald-700 hover:text-emerald-900 underline text-center break-all font-medium px-1 select-all transition-colors"></a>
+                <div class="p-4 bg-emerald-950/5 border border-emerald-950/10 rounded-2xl flex flex-col gap-2">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-800 text-center block">Mokėjimo duomenys pasiekiami adresu:</span>
+                    <a id="generated-url" href="#" target="_blank" class="text-xs font-mono text-emerald-700 hover:text-emerald-900 underline text-center break-all font-semibold px-1 select-all transition-colors"></a>
                 </div>
             </div>
 
         </main>
 
         <footer class="text-center text-xs text-zinc-400 font-medium w-full pb-4 pt-2">
-            Mokėjimai paprastai &copy; <span id="year"></span> – <a href="./index.html" class="text-zinc-500 hover:underline">pavedimu.lt</a>
+            Mokėjimai paprastai &copy; <span id="year"></span> – <a href="./index.html" class="text-zinc-500 hover:underline transition-colors hover:text-emerald-700">pavedimu.lt</a>
         </footer>
         
     </div>
@@ -174,10 +180,9 @@
                 return; 
             }
 
-            // Krovimosi būsena
             resultContainer.classList.add('hidden');
             btnSubmit.disabled = true;
-            btnIcon.className = "fa-solid fa-circle-notch animate-spin text-sm";
+            btnIcon.className = "fa-solid fa-circle-notch animate-spin text-sm text-white";
             btnText.innerText = "Kuriama...";
 
             setTimeout(() => {
@@ -192,12 +197,10 @@
                 urlAnchor.innerText = finalUrl;
                 urlAnchor.href = finalUrl;
 
-                // Atstatomas mygtukas su grandinės ikona
                 btnSubmit.disabled = false;
-                btnIcon.className = "fa-solid fa-link text-sm";
+                btnIcon.className = "fa-solid fa-link text-white group-hover:text-emerald-200 transition-colors duration-200";
                 btnText.innerText = "Gauti nuorodą";
 
-                // Parodomas rezultatas
                 resultContainer.classList.remove('hidden');
                 resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 800);
